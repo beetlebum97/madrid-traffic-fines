@@ -79,6 +79,6 @@ Abre `http://127.0.0.1:8000`. Para acceder desde otro dispositivo de la misma re
 uv run pytest --doctest-modules --cov=traficfines --cov=webapp.server --cov-report=term-missing --cov-report=html
 ```
 
-Los cuardernos de `notebooks/` son material complementario. Para abrirlos, instala Jupyter por separado o impórtalos en Google Colab o en tu IDE.
+Los cuadernos de `notebooks/` son material complementario. Para abrirlos, instala Jupyter por separado o impórtalos en Google Colab o en tu IDE.
 
 **Datos:** Portal de Datos Abiertos del Ayuntamiento de Madrid · Licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
