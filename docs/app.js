@@ -335,6 +335,15 @@ window.addEventListener("submit", (event) => {
   }
 }, true);
 
+const mapCard = document.querySelector(".map-card");
+mapButton.addEventListener("click", () => {
+  if (mapCard) {
+    window.setTimeout(() => {
+      mapCard.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 80);
+  }
+});
+
 window.addEventListener("DOMContentLoaded", async () => {
   try {
     const response = await fetch("./data/month.json");
