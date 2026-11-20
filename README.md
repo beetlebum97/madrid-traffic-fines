@@ -1,9 +1,9 @@
 # Multas de tráfico de Madrid
 
-Proyecto iniciado como práctica de _Python para Desarrolladores_ del **Máster en Big Data & Data Engineering (UCM)**, ampliado como aplicación web para explorar datos abiertos del Ayuntamiento de Madrid.
+Proyecto desarrollado a partir de una práctica de la asignatura **Python para Desarrolladores** del **Máster en Big Data & Data Engineering (UCM)**, centrada en el análisis de datos abiertos de multas de tráfico de Madrid y la creación de un paquete Python para su descarga, procesamiento y análisis. Como ampliación personal, se ha desarrollado una aplicación web interactiva para explorar estos datos mediante resúmenes mensuales y mapas geolocalizados.
 
 > **[Ver Demo Online](https://beetlebum97.github.io/madrid-traffic-fines)**  
-> Muestra una versión estática interactiva con un periodo precargado. Para consultar cualquier mes desde enero de 2015, ejecuta la aplicación en local.
+> Muestra una versión estática interactiva con un periodo precargado. Para consultar cualquier mes desde enero de 2015, revisa el apartado `Ejecutar en local`.
 
 ## Capturas
 
@@ -29,12 +29,6 @@ Proyecto iniciado como práctica de _Python para Desarrolladores_ del **Máster 
     </td>
   </tr>
 </table>
-
-## Aplicación web
-
-Dashboard mensual con resumen de multas, importes estimados, distribución por calificación, actividad por hora y mapa de ubicaciones geolocalizadas. El mapa muestra registros cuya calle y número coinciden con un portal del callejero oficial.
-
-La fuente publica los datos con un decalaje de tres meses para consolidar información de distintas fuentes. El formulario muestra la cobertura consultada y avisa si el periodo elegido aún no está publicado.
 
 ## Estructura del proyecto
 
@@ -67,7 +61,14 @@ La fuente publica los datos con un decalaje de tres meses para consolidar inform
 └── uv.lock                  # Versiones bloqueadas para reproducir el entorno.
 ```
 
-## Ejecutar en local
+## Aplicación web
+
+Dashboard mensual con resumen de multas, importes estimados, distribución por calificación, actividad por hora y mapa de ubicaciones geolocalizadas. El mapa muestra registros cuya calle y número coinciden con un portal del callejero oficial.
+
+La fuente publica los datos con un decalaje de tres meses para consolidar información de distintas fuentes. El formulario muestra la cobertura consultada y avisa si el periodo elegido aún no está publicado.
+
+
+### Ejecutar en local
 
 Requiere [uv](https://docs.astral.sh/uv/). Desde la raíz del proyecto:
 
@@ -76,9 +77,9 @@ uv sync --no-dev
 uv run webapp/server.py
 ```
 
-Abre `http://127.0.0.1:8000`. Para acceder desde otro dispositivo de la misma red, introduce la direccion IP del servidor. `http://ip-servidor:8000`
+Para visualizar la web, abre un navegador e introduce `http://127.0.0.1:8000` o `http://ip-servidor:8000` si accedes desde otro dispositivo de la misma red.
 
-## Regenerar la demo estática (GitHub Pages)
+### Regenerar la demo estática (GitHub Pages)
 
 Para generar o actualizar la versión estática en `docs/` con el último mes publicado (o con un periodo específico):
 
@@ -95,13 +96,20 @@ Para previsualizar la demo estática en local sin levantar el servidor de backen
 uv run python -m http.server 8080 --directory docs
 ```
 
-## Tests
+Abre un navegador e introduce `http://127.0.0.1:8080` o `http://ip-servidor:8080` si accedes desde otro dispositivo de la misma red.
+
+
+## Otras funcionalidades
+
+### Tests y cobertura 
+
+Ejecuta los tests y genera el directorio y genera directorio `htmlcov/` con informe de resultados
 
 ```bash
 uv run pytest --doctest-modules --cov=traficfines --cov=webapp.server --cov-report=term-missing --cov-report=html
 ```
 
-## Ejemplo de uso del módulo`traficfines` y la clase `MadridFines`
+### Uso del paquete `traficfines` y la clase `MadridFines` desde la consola de Python
 
 ```text
 uv run python
@@ -125,6 +133,17 @@ MES ANIO
 >>> exit
 ```
 
-Los cuadernos de `notebooks/` son material complementario. Para abrirlos, instala Jupyter o impórtalos en Google Colab o en tu IDE.
+### Creación de paquete distribuible instalable
+
+Genera directorio `dist/` con el paquete en forma Wheel (.whl) y el código fuente empaquetado (tar.gz)
+
+```bash
+uv build
+```
+
+## Notebooks
+
+Los cuadernos de `notebooks/` son material complementario. Constituyen la práctica original. Para abrirlos, instala Jupyter o impórtalos en Google Colab o en tu IDE.
+
 
 **Datos:** Portal de Datos Abiertos del Ayuntamiento de Madrid · Licencia [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/).
