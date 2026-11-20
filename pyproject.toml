@@ -1,0 +1,25 @@
+[project]
+name = "traficfines"
+version = "0.1.0"
+description = "Práctica de la asignatura Python para Desarrolladores - Máster Big Data & Data Engineering (UCM)"
+readme = "README.md"
+authors = [
+    { name = "David Vázquez Rodríguez", email = "davvaz03@ucm.es" }
+]
+requires-python = ">=3.11"
+dependencies = [
+    "beautifulsoup4>=4.15.0",
+    "matplotlib>=3.11.2",
+    "pandas>=3.1.1",
+    "requests>=2.34.2",
+]
+
+[build-system]
+requires = ["uv_build>=0.13.5,<0.14.0"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "pytest>=9.2.0",
+    "pytest-cov>=7.1.0",
+]

@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Explora estadísticas mensuales de multas de circulación de Madrid.">
+  <title>Multas de tráfico en Madrid</title>
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+  <link rel="stylesheet" href="/styles.css?v=20261120-chart-emphasis">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.Default.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/" aria-label="Multas Madrid, inicio"><span class="brand-mark">M</span> Datos abiertos de Madrid</a>
+    <a class="source-link" href="https://datos.madrid.es/dataset/210104-0-multas-circulacion-detalle/downloads" target="_blank" rel="noreferrer">Fuente de datos ↗</a>
+  </header>
+
+  <main class="page">
+    <section class="intro">
+      <p class="eyebrow">Explorador mensual</p>
+      <h1>Multas de circulación<br><span>en Madrid</span></h1>
+      <p class="lede">Consulta la distribución, los importes estimados y las horas con más sanciones a partir de los datos públicos del Ayuntamiento.</p>
+      <form id="filters" class="filters">
+        <label>Año <input id="year" name="year" type="number" min="2015" max="2026" value="2026" required></label>
+        <label>Mes
+          <select id="month" name="month">
+            <option value="1">Enero</option><option value="2">Febrero</option><option value="3">Marzo</option>
+            <option value="4">Abril</option><option value="5">Mayo</option><option value="6" selected>Junio</option>
+            <option value="7">Julio</option><option value="8">Agosto</option><option value="9">Septiembre</option>
+            <option value="10">Octubre</option><option value="11">Noviembre</option><option value="12">Diciembre</option>
+          </select>
+        </label>
+        <button type="submit">Ver datos <span aria-hidden="true">→</span></button>
+      </form>
+      <aside id="source-note" class="coverage-card" aria-live="polite">
+        <span class="coverage-mark" aria-hidden="true">i</span>
+        <div class="coverage-copy">
+          <p class="coverage-heading">Disponibilidad de los datos</p>
+          <p id="coverage-range" class="coverage-range">Enero de 2015 — Junio de 2026</p>
+          <p class="coverage-detail">El Ayuntamiento publica la información con un decalaje de tres meses para consolidar datos de distintas fuentes.</p>
+          <p id="coverage-updated" class="coverage-updated">Ficha actualizada el 20 de octubre de 2026</p>
+        </div>
+      </aside>
+    </section>
+
+    <section id="results" class="results" aria-live="polite" hidden>
+      <div class="section-heading"><div><p class="eyebrow">Resumen del periodo</p><h2 id="period-title">—</h2></div><span id="status" class="status">Cargando…</span></div>
+      <div class="metrics">
+        <article class="metric"><span>Multas registradas</span><strong id="records">—</strong><small>Registros del fichero mensual</small></article>
+        <article class="metric"><span>Importe máximo estimado</span><strong id="maximum">—</strong><small>Sin aplicar pronto pago</small></article>
+        <article class="metric"><span>Importe mínimo estimado</span><strong id="minimum">—</strong><small>Aplicando descuento del 50 % cuando consta</small></article>
+      </div>
+      <div class="charts">
+        <article class="chart-card"><div class="chart-title"><div><h3>Multas por calificación</h3><p>Recuento y porcentaje sobre el total del periodo</p></div></div><div id="categories-chart" class="chart" role="img" aria-label="Gráfico de multas y porcentaje por calificación"></div></article>
+        <article class="chart-card"><div class="chart-title"><div><h3>Actividad por hora</h3><p>Hora indicada en el registro</p></div></div><div id="hourly-chart" class="chart" role="img" aria-label="Gráfico de multas por hora"></div></article>
+      </div>
+      <article class="map-card">
+        <div class="map-heading"><div><p class="eyebrow">Exploración geográfica</p><h3>Multas geolocalizadas</h3><p class="map-description">Se muestran multas cuya calle y número coinciden con un portal del callejero oficial.</p></div><button id="load-map" type="button">Cargar mapa <span aria-hidden="true">→</span></button></div>
+        <div id="map-summary" class="map-summary" hidden></div>
+        <details id="offense-filter" class="offense-filter" hidden>
+          <summary id="offense-filter-summary">Tipos de multa · todos</summary>
+          <div class="offense-menu">
+            <div class="severity-options">
+              <label><input class="severity-option" type="checkbox" value="LEVE" checked> LEVE <span id="count-leve"></span></label>
+              <label><input class="severity-option" type="checkbox" value="GRAVE" checked> GRAVE <span id="count-grave"></span></label>
+              <label><input class="severity-option" type="checkbox" value="MUY GRAVE" checked> MUY GRAVE <span id="count-muy-grave"></span></label>
+            </div>
+          </div>
+        </details>
+        <div id="map-message" class="map-message" role="status" hidden></div>
+        <div id="map" class="map" aria-label="Mapa de multas geolocalizadas de Madrid" hidden></div>
+        <p class="map-credit">Mapa base © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">OpenStreetMap</a>. Direcciones: <a href="https://datos.madrid.es/dataset/213605-0-callejero-oficial-madrid/information" target="_blank" rel="noreferrer">Callejero oficial del Ayuntamiento de Madrid</a> (CC BY 4.0).</p>
+      </article>
+      <p class="disclaimer">Los importes son estimaciones calculadas a partir de la cuantía de las multas y el campo de descuento. No representan necesariamente la recaudación efectiva.</p>
+    </section>
+    <div id="message" class="message" role="status">Elige un periodo para cargar el resumen.</div>
+  </main>
+  <footer>Proyecto de portfolio · Fuentes: datos abiertos del Ayuntamiento de Madrid (CC BY 4.0)</footer>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
+  <script src="https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js" defer></script>
+  <script src="https://unpkg.com/proj4@2.12.1/dist/proj4.js" defer></script>
+  <script src="/app.js?v=20261120-chart-emphasis" defer></script>
+</body>
+</html>
